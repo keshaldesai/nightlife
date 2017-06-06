@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
+import AutoForm from './AutoForm';
+import { Container } from 'semantic-ui-react';
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        App
-      </div>
+      <Container>
+        <AutoForm />
+      </Container>
     );
   }
 }
