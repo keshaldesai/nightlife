@@ -12,7 +12,7 @@ const mongoConfig = require('./config/mongoConfig.json');
 const mongoose = require('mongoose');
 
 //connect to MongoDB
-mongoose.connect(`mongodb://${mongoConfig.user}:${mongoConfig.pass}@ds161551.mlab.com:61551/pollvoting`);
+mongoose.connect(`mongodb://${mongoConfig.user}:${mongoConfig.pass}@ds113660.mlab.com:13660/nightlifefcc`);
 
 //use bodyparser, cors, passport
 setupControlller(app);
