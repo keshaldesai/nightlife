@@ -9,12 +9,14 @@
   "author": "Keshal Desai",
   "license": "MIT",
   "dependencies": {
+    "@google/maps": "^0.3.1",
     "body-parser": "^1.17.2",
     "cors": "^2.8.3",
     "express": "^4.15.3",
     "jsonwebtoken": "^7.4.1",
     "mongoose": "^4.10.4",
     "passport": "^0.3.2",
-    "passport-google-oauth": "^1.0.0"
+    "passport-google-oauth": "^1.0.0",
+    "request": "^2.81.0"
   }
 }
