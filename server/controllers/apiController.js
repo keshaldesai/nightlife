@@ -6,13 +6,5 @@ const googleMapsClient = require('@google/maps').createClient({
 
 module.exports = function (app) {
 	//API route handlers
-	app.get('/api/search', function (req, res) {
-		googleMapsClient.geocode({
-			address: '1600 Amphitheatre Parkway, Mountain View, CA'
-		}, function (err, response) {
-			if (!err) {
-				console.log(response.json.results);
-			}
-		});
-	});
+	app.get('/api/search', function (req, res) { })
 }
