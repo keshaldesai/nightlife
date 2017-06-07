@@ -1,6 +1,6 @@
 import { UPDATE_FORM } from '../actions/types';
 
-const INITIAL_STATE = { address: '' };
+const INITIAL_STATE = { address: 'New York, NY, United States' };
 
 export default function (state = INITIAL_STATE, action) {
 	switch (action.type) {

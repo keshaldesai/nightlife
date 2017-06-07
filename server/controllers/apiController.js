@@ -13,7 +13,7 @@ module.exports = function (app) {
 			qs: {
 				key: API_KEY,
 				location: req.body.location,
-				radius: '1000',
+				radius: '8047',
 				type: 'bar'
 			}
 		}, (err, response, body) => {
@@ -22,9 +22,9 @@ module.exports = function (app) {
 			} else {
 				const { results } = JSON.parse(body);
 				const cleanRes = results.map(bar => {
-					const { name, id, rating, photos } = bar;
-					const icon = photos ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=175&photoreference=${photos[0].photo_reference}&key=${API_KEY}` : '';
-					return { name, id, rating, icon };
+					const { name, id, rating, photos, vicinity } = bar;
+					const icon = photos ? `https://maps.googleapis.com/maps/api/place/photo?&maxwidth=300&photoreference=${photos[0].photo_reference}&key=${API_KEY}` : '';
+					return { name, id, rating, icon, vicinity };
 				});
 				res.json(cleanRes);
 			}

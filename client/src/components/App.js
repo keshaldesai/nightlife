@@ -6,7 +6,7 @@ import BarList from './BarList';
 class App extends Component {
   render() {
     return (
-      <Container text>
+      <Container style={{ width: "600px" }}>
         <AutoForm />
         <BarList />
       </Container>

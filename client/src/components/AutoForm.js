@@ -1,6 +1,6 @@
 import React from 'react'
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
-import { Form, Button, Input } from 'semantic-ui-react';
+import { Form, Button, Input, Segment } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 
@@ -39,13 +39,15 @@ class AutoForm extends React.Component {
 			onChange: this.handleChange.bind(this),
 		}
 		return (
-			<Form onSubmit={this.handleFormSubmit.bind(this)} style={{ width: '300px' }}>
-				<Form.Field>
-					<label>Where are you located?</label>
-					<Input as={PlacesAutocomplete} inputProps={inputProps} />
-				</Form.Field>
-				<Button type="submit" color="red">Submit</Button>
-			</Form>
+			<Segment style={{ marginTop: "15px" }}>
+				<Form onSubmit={this.handleFormSubmit.bind(this)} style={{ width: "300px" }}>
+					<Form.Field>
+						<label>Where are you located?</label>
+						<Input as={PlacesAutocomplete} inputProps={inputProps} />
+					</Form.Field>
+					<Button type="submit" color="red">Submit</Button>
+				</Form>
+			</Segment>
 		)
 	}
 }

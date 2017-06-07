@@ -2,9 +2,13 @@ body {
     margin: 0;
     padding: 0;
     font-family: sans-serif;
-    background-color: #E3CDA4;
+    background-color: #703030;
 }
 
 #PlacesAutocomplete__autocomplete-container {
     z-index: 1;
+}
+
+.center-cropped img {
+    max-height: 170px;
 }
