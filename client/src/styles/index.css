@@ -4,3 +4,7 @@ body {
     font-family: sans-serif;
     background-color: #E3CDA4;
 }
+
+#PlacesAutocomplete__autocomplete-container {
+    z-index: 1;
+}

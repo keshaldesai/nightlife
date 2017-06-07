@@ -23,7 +23,7 @@ module.exports = function (app) {
 				const { results } = JSON.parse(body);
 				const cleanRes = results.map(bar => {
 					const { name, id, rating, photos } = bar;
-					const icon = photos ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photos[0].photo_reference}&key=${API_KEY}` : '';
+					const icon = photos ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=175&photoreference=${photos[0].photo_reference}&key=${API_KEY}` : '';
 					return { name, id, rating, icon };
 				});
 				res.json(cleanRes);

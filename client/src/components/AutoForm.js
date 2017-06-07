@@ -5,19 +5,29 @@ import { connect } from 'react-redux';
 import * as actions from '../actions';
 
 class AutoForm extends React.Component {
-	constructor(props) {
-		super(props)
-		this.state = { address: '' }
-		this.onChange = (address) => this.setState({ address })
+	componentWillMount() {
+		const lastSearch = localStorage.getItem('lastSearch');
+		if (lastSearch) {
+			this.props.updateForm(lastSearch);
+			geocodeByAddress(lastSearch)
+				.then(results => getLatLng(results[0]))
+				.then(latLng => {
+					this.props.postLocation(latLng.lat + ',' + latLng.lng);
+				})
+				.catch(error => console.error('Error', error))
+		}
 	}
 
-	handleFormSubmit = (event) => {
-		event.preventDefault()
+	handleChange(address) {
+		this.props.updateForm(address);
+	}
 
-		geocodeByAddress(this.state.address)
+	handleFormSubmit(event) {
+		event.preventDefault()
+		localStorage.setItem('lastSearch', this.props.address);
+		geocodeByAddress(this.props.address)
 			.then(results => getLatLng(results[0]))
 			.then(latLng => {
-				console.log(latLng.lat + ',' + latLng.lng);
 				this.props.postLocation(latLng.lat + ',' + latLng.lng);
 			})
 			.catch(error => console.error('Error', error))
@@ -25,11 +35,11 @@ class AutoForm extends React.Component {
 
 	render() {
 		const inputProps = {
-			value: this.state.address,
-			onChange: this.onChange,
+			value: this.props.address,
+			onChange: this.handleChange.bind(this),
 		}
 		return (
-			<Form onSubmit={this.handleFormSubmit} style={{ width: '300px' }}>
+			<Form onSubmit={this.handleFormSubmit.bind(this)} style={{ width: '300px' }}>
 				<Form.Field>
 					<label>Where are you located?</label>
 					<Input as={PlacesAutocomplete} inputProps={inputProps} />
@@ -42,7 +52,7 @@ class AutoForm extends React.Component {
 
 function mapStateToProps(state) {
 	return {
-		bars: state.bars.all
+		address: state.address.address
 	};
 }
 

@@ -1,26 +1,26 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
-import { Segment, Item, Button, Icon } from 'semantic-ui-react';
+import { Segment, Item, Button, Icon, Rating } from 'semantic-ui-react';
 
 class BarList extends Component {
 	renderList() {
 		const { bars } = this.props;
-		console.log(bars);
 		const keys = Object.keys(bars);
 		if (keys.length === 0) {
-			return <Segment>No bars found.</Segment>;
+			return 'No bars found.';
 		} else {
 			return keys.map((key) => {
 				const bar = bars[key];
 				return (
 					<Item key={bar.id}>
 						<Item.Image src={bar.icon} />
-
 						<Item.Content>
 							<Item.Header as='a'>{bar.name}</Item.Header>
 							<Item.Meta>
-								<span className='cinema'>{bar.rating}</span>
+								<span className='cinema'>
+									<Rating defaultRating={bar.rating} maxRating={5} disabled />
+								</span>
 							</Item.Meta>
 							<Item.Extra>
 								<Button primary floated='right'>
@@ -36,9 +36,11 @@ class BarList extends Component {
 	}
 	render() {
 		return (
-			<div>
-				{this.renderList()}
-			</div>
+			<Segment>
+				<Item.Group divided>
+					{this.renderList()}
+				</Item.Group>
+			</Segment>
 		);
 	}
 }

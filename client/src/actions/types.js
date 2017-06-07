@@ -1,1 +1,2 @@
 export const POST_LOCATION = 'POST_LOCATION';
+export const UPDATE_FORM = 'UPDATE_FORM';
