@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
-import { Segment, Item, Button, Icon, Rating, Loader } from 'semantic-ui-react';
+import { Segment, Item, Button, Rating, Loader } from 'semantic-ui-react';
 
 class BarList extends Component {
 	renderList() {
@@ -22,11 +22,8 @@ class BarList extends Component {
 							</Item.Meta>
 							<Item.Description>{bar.vicinity}</Item.Description>
 							<Item.Extra>
-								<Button animated>
-									<Button.Content visible>I'm going!</Button.Content>
-									<Button.Content hidden>
-										<Icon name='right arrow' />
-									</Button.Content>
+								<Button>
+									<Button.Content>Are you going?</Button.Content>
 								</Button>
 							</Item.Extra>
 						</Item.Content>
