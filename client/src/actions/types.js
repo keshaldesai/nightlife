@@ -1,0 +1,1 @@
+export const POST_LOCATION = 'POST_LOCATION';

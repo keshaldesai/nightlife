@@ -1,6 +1,8 @@
 import React from 'react'
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 import { Form, Button, Input } from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import * as actions from '../actions';
 
 class AutoForm extends React.Component {
 	constructor(props) {
@@ -14,7 +16,10 @@ class AutoForm extends React.Component {
 
 		geocodeByAddress(this.state.address)
 			.then(results => getLatLng(results[0]))
-			.then(latLng => console.log('Success', latLng))
+			.then(latLng => {
+				console.log(latLng.lat + ',' + latLng.lng);
+				this.props.postLocation(latLng.lat + ',' + latLng.lng);
+			})
 			.catch(error => console.error('Error', error))
 	}
 
@@ -29,11 +34,16 @@ class AutoForm extends React.Component {
 					<label>Where are you located?</label>
 					<Input as={PlacesAutocomplete} inputProps={inputProps} />
 				</Form.Field>
-
-				<Button type="submit">Submit</Button>
+				<Button type="submit" color="red">Submit</Button>
 			</Form>
 		)
 	}
 }
 
-export default AutoForm;
+function mapStateToProps(state) {
+	return {
+		bars: state.bars.all
+	};
+}
+
+export default connect(mapStateToProps, actions)(AutoForm);

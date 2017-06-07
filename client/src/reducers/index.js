@@ -1,7 +1,8 @@
 import { combineReducers } from 'redux';
+import listReducer from './listReducer';
 
 const rootReducer = combineReducers({
-	state: (state = {}) => state
+	bars: listReducer
 });
 
 export default rootReducer;
