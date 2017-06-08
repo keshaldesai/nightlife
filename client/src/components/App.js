@@ -2,23 +2,29 @@ import React, { Component } from 'react';
 import AutoForm from './AutoForm';
 import { Container } from 'semantic-ui-react';
 import BarList from './BarList';
+import qs from 'qs';
+import { connect } from 'react-redux';
+import * as actions from '../actions';
 
 class App extends Component {
   componentWillMount() {
     if (!this.props.authenticated) {
       const query = this.props.location.search;
-      const parsed = queryString.parse(query);
-      if (parsed.token) {
+      const parsed = qs.parse(query);
+      console.log(parsed);
+      if (parsed['?token']) {
         const token = parsed.token;
         this.props.checkAuth(token).then(() => {
           localStorage.setItem('token', token);
           this.props.fetchUserInfo(token).then(() => {
-            this.props.history.push('/profile');
+            this.props.history.push('/');
           });
         });
       } else {
-        const token = localStorage.getItem('token')
-        this.props.checkAuth(token).then(this.props.fetchUserInfo(token));
+        const token = localStorage.getItem('token');
+        if (token) {
+          this.props.checkAuth(token).then(this.props.fetchUserInfo(token));
+        }
       }
     }
 
@@ -35,9 +41,8 @@ class App extends Component {
 
 function mapStateToProps(state) {
   return {
-    checking: state.auth.checking,
-    info: state.user.info
+    authenticated: state.auth.authenticated
   }
 }
 
-export default App;
+export default connect(mapStateToProps, actions)(App);
