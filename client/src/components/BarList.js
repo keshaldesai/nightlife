@@ -6,6 +6,9 @@ import { Segment, Item, Button, Rating, Loader } from 'semantic-ui-react';
 class BarList extends Component {
 	renderList() {
 		const { bars } = this.props;
+		if (!bars) {
+			return;
+		}
 		const keys = Object.keys(bars);
 		if (keys.length === 0) {
 			return <Loader active />;

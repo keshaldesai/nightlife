@@ -1,6 +1,6 @@
 import React from 'react'
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
-import { Form, Button, Input, Segment } from 'semantic-ui-react';
+import { Form, Button, Input, Segment, Grid, Icon } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 
@@ -15,6 +15,22 @@ class AutoForm extends React.Component {
 					this.props.postLocation(latLng.lat + ',' + latLng.lng);
 				})
 				.catch(error => console.error('Error', error))
+		}
+	}
+
+	renderSign() {
+		if (this.props.authenticated) {
+			return (
+				<Button color='google plus' onClick={() => { this.props.signOutUser(localStorage.getItem('token')).then(localStorage.removeItem('token')) }}>
+					<Icon name='google plus' /> Sign out
+				</Button>
+			);
+		} else {
+			return (
+				<Button color='google plus' href="localhost:8000/auth/google">
+					<Icon name='google plus' /> Sign in
+    			</Button>
+			);
 		}
 	}
 
@@ -39,14 +55,23 @@ class AutoForm extends React.Component {
 			onChange: this.handleChange.bind(this),
 		}
 		return (
-			<Segment style={{ marginTop: "15px" }}>
-				<Form onSubmit={this.handleFormSubmit.bind(this)} style={{ width: "300px" }}>
-					<Form.Field>
-						<label>Where are you located?</label>
-						<Input as={PlacesAutocomplete} inputProps={inputProps} />
-					</Form.Field>
-					<Button type="submit" color="red">Submit</Button>
-				</Form>
+			<Segment style={{ marginTop: "15px" }} clearing>
+				<Grid>
+					<Grid.Column width={10}>
+						<Form onSubmit={this.handleFormSubmit.bind(this)}>
+							<Form.Field>
+								<label>Where are you located?</label>
+								<Input as={PlacesAutocomplete} inputProps={inputProps} />
+							</Form.Field>
+							<Button type="submit" color="grey">Submit</Button>
+						</Form>
+					</Grid.Column>
+					<Grid.Column width={2}>
+					</Grid.Column>
+					<Grid.Column width={4}>
+						{this.renderSign()}
+					</Grid.Column>
+				</Grid>
 			</Segment>
 		)
 	}
@@ -54,7 +79,8 @@ class AutoForm extends React.Component {
 
 function mapStateToProps(state) {
 	return {
-		address: state.address.address
+		address: state.address.address,
+		authenticated: state.auth.authenticated
 	};
 }
 

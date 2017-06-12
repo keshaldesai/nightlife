@@ -2,6 +2,8 @@ const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const secret = require('../config/jwtConfig.json').secret;
 const User = require('../models/user');
+const verifyUser = require('../helpers/verifyUser');
+const errorHandler = require('../helpers/errorHandler');
 
 module.exports = function (app) {
 
@@ -19,46 +21,34 @@ module.exports = function (app) {
 
 	//verifies client by token, returns user info to client app
 	app.post('/api/auth/in', function (req, res) {
-		if (req.body.token) {
-			jwt.verify(req.body.token, secret, null, function (err, decoded) {
-				if (err) {
-					console.error(err);
-					return res.status(401).end();
-				} else {
-					User.findOne({ token: decoded.token }, function (err, user) {
-						if (err) {
-							console.error(err);
-							return res.status(401).end();
-						} else {
-							return res.json({
-								id: user.googleId,
-								name: user.name
-							});
-						}
-					});
-				}
+		const cb = (user) => {
+			return res.json({
+				id: user.googleId,
+				name: user.name
 			});
-		} else {
-			return res.status(401).end();
 		}
+		verifyUser(req.body.token, res, cb);
 	});
 
 	//handles server side logout (token removal from DB)
 	app.post('/api/auth/out', function (req, res) {
-		if (req.body.token) {
-			jwt.verify(req.body.token, secret, null, function (err, decoded) {
-				if (err) {
-					console.error(err);
-					return res.status(401).end();
-				} else {
-					User.findOneAndUpdate({ token: decoded.token }, { token: '' }, function (err, user) {
-						if (err) console.error(err);
-						return res.end();
-					});
-				}
+		const cb = (user) => {
+			user.token = '';
+			user.save((err, user) => {
+				return res.end();
 			});
-		} else {
-			return res.status(401).end();
-		}
+		};
+		verifyUser(req.body.token, res, cb);
+	});
+
+	//get user info
+	app.post('/api/user', function (req, res) {
+		const cb = (user) => {
+			res.json({
+				name: user.name,
+				googleId: user.googleId
+			});
+		};
+		verifyUser(req.body.token, res, cb);
 	});
 }

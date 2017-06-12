@@ -11,9 +11,8 @@ class App extends Component {
     if (!this.props.authenticated) {
       const query = this.props.location.search;
       const parsed = qs.parse(query);
-      console.log(parsed);
       if (parsed['?token']) {
-        const token = parsed.token;
+        const token = parsed['?token'];
         this.props.checkAuth(token).then(() => {
           localStorage.setItem('token', token);
           this.props.fetchUserInfo(token).then(() => {
