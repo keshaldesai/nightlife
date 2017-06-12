@@ -12,7 +12,7 @@ class AutoForm extends React.Component {
 			geocodeByAddress(lastSearch)
 				.then(results => getLatLng(results[0]))
 				.then(latLng => {
-					this.props.postLocation(latLng.lat + ',' + latLng.lng);
+					this.props.postLocation(latLng.lat + ',' + latLng.lng, this.props.info.googleId);
 				})
 				.catch(error => console.error('Error', error))
 		}
@@ -21,14 +21,14 @@ class AutoForm extends React.Component {
 	renderSign() {
 		if (this.props.authenticated) {
 			return (
-				<Button color='google plus' onClick={() => { this.props.signOutUser(localStorage.getItem('token')).then(localStorage.removeItem('token')) }}>
-					<Icon name='google plus' /> Sign out
+				<Button color="google plus" onClick={() => { this.props.signOutUser(localStorage.getItem('token')).then(localStorage.removeItem('token')) }}>
+					<Icon name="google plus" /> Sign out
 				</Button>
 			);
 		} else {
 			return (
-				<Button color='google plus' href="localhost:8000/auth/google">
-					<Icon name='google plus' /> Sign in
+				<Button color="google plus" href="http://localhost:8000/auth/google">
+					<Icon name="google plus" /> Sign in
     			</Button>
 			);
 		}
@@ -44,7 +44,8 @@ class AutoForm extends React.Component {
 		geocodeByAddress(this.props.address)
 			.then(results => getLatLng(results[0]))
 			.then(latLng => {
-				this.props.postLocation(latLng.lat + ',' + latLng.lng);
+				console.log(this.props.info.googleId);
+				this.props.postLocation(latLng.lat + ',' + latLng.lng, this.props.info.googleId);
 			})
 			.catch(error => console.error('Error', error))
 	}
@@ -80,7 +81,8 @@ class AutoForm extends React.Component {
 function mapStateToProps(state) {
 	return {
 		address: state.address.address,
-		authenticated: state.auth.authenticated
+		authenticated: state.auth.authenticated,
+		info: state.user.info
 	};
 }
 

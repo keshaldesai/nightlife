@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import AutoForm from './AutoForm';
 import { Container } from 'semantic-ui-react';
-import BarList from './BarList';
+import BarList from './Bar/BarList';
 import qs from 'qs';
 import { connect } from 'react-redux';
 import * as actions from '../actions';

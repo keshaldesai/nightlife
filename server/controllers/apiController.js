@@ -10,10 +10,11 @@ module.exports = function (app) {
 
 	//returns list of bars nearby a location
 	app.post('/api/search', (req, res) => {
+		const { location, userId } = req.body;
 		request.get('https://maps.googleapis.com/maps/api/place/nearbysearch/json?', {
 			qs: {
 				key: API_KEY,
-				location: req.body.location,
+				location,
 				radius: '8047',
 				type: 'bar'
 			}
@@ -22,17 +23,38 @@ module.exports = function (app) {
 				errorHandler(err, res, 400);
 			} else {
 				const { results } = JSON.parse(body);
-				const shortRes = results.slice(0, 10);
+				const shortRes = results.length > 10 ? results.slice(0, 10) : results;
 				const obj = {};
 				shortRes.forEach((bar, index) => {
 					const { name, id, rating, photos, vicinity } = bar;
 					const icon = photos ? `https://maps.googleapis.com/maps/api/place/photo?&maxwidth=300&photoreference=${photos[0].photo_reference}&key=${API_KEY}` : '';
-					Bar.findOne({ barId: id }).then((savedBar) => {
-						obj[index] = { name, id, rating, icon, vicinity };
-						obj[index].usersGoing = savedBar ? savedBar.usersGoing.length : 0;
-						if (Object.keys(obj).length === 10) {
-							res.json(obj);
+					Bar.findOne({ barId: id }, function (err, savedBar) {
+						if (err) {
+							errorHandler(err, res, 400);
+						} else if (savedBar && savedBar.usersGoing.length > 0) {
+							savedBar.usersGoing.forEach((user) => {
+								obj[index] = { name, id, rating, icon, vicinity };
+								obj[index].usersGoing = savedBar ? savedBar.usersGoing.length : 0;
+								console.log('userId', userId, 'user', user, 'name', name);
+								if (userId && user === userId) {
+									console.log(name);
+									obj[index].going = true;
+								} else {
+									obj[index].going = false;
+								}
+								if (Object.keys(obj).length === shortRes.length) {
+									res.json(obj);
+								}
+							});
+						} else {
+							obj[index] = { name, id, rating, icon, vicinity };
+							obj[index].usersGoing = 0;
+							obj[index].going = false;
+							if (Object.keys(obj).length === shortRes.length) {
+								res.json(obj);
+							}
 						}
+
 					});
 				});
 			}

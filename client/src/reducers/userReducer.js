@@ -1,6 +1,6 @@
 import { FETCH_USER_INFO, SIGN_OUT } from '../actions/types';
 
-const INITIAL_STATE = { info: null };
+const INITIAL_STATE = { info: { googleId: '', name: '' } };
 
 export default function (state = INITIAL_STATE, action) {
 	switch (action.type) {
