@@ -15,6 +15,13 @@ class BarList extends Component {
 		} else {
 			return keys.map((key) => {
 				const bar = bars[key];
+				const usersGoing = bar.usersGoing.length;
+				let usersGoingDesc;
+				if (!usersGoing) {
+					usersGoingDesc = <Item.Description>Be the first to RSVP!</Item.Description>;
+				} else {
+					usersGoingDesc = <Item.Description>{usersGoing === 1 ? `1 person going!` : `${usersGoing} people going!`}</Item.Description>;
+				}
 				return (
 					<Item key={bar.id}>
 						<Item.Image size="medium" src={bar.icon} className="center-cropped" />
@@ -24,6 +31,7 @@ class BarList extends Component {
 								<Rating defaultRating={bar.rating} maxRating={5} icon="star" size="large" disabled />
 							</Item.Meta>
 							<Item.Description>{bar.vicinity}</Item.Description>
+							<Item.Description>{`${bar.vicinity} people going!`}</Item.Description>
 							<Item.Extra>
 								<Button>
 									<Button.Content>Are you going?</Button.Content>
