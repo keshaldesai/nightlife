@@ -7,6 +7,9 @@ import BarItem from './BarItem';
 class BarList extends Component {
 	renderList() {
 		const { bars } = this.props;
+		if (!bars) {
+			return 'Server error.';
+		}
 		const keys = Object.keys(bars);
 		if (keys.length === 0) {
 			return <Loader active />;

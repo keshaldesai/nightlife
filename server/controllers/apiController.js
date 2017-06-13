@@ -24,9 +24,9 @@ module.exports = function (app) {
 			} else {
 				const callback = (user) => {
 					const { results } = JSON.parse(body);
-					const trimRes = results.length > 10 ? results.slice(0, 10) : results;
+					const shortRes = results.length > 10 ? results.slice(0, 10) : results;
 					const obj = {};
-					trimRes.forEach((bar, index) => {
+					shortRes.forEach((bar, index) => {
 						const { name, id, rating, photos, vicinity } = bar;
 						const icon = photos ? `https://maps.googleapis.com/maps/api/place/photo?&maxwidth=300&photoreference=${photos[0].photo_reference}&key=${API_KEY}` : '';
 						Bar.findOne({ barId: id }, (err, savedBar) => {

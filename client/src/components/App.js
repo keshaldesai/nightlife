@@ -12,24 +12,21 @@ class App extends Component {
 		if (!this.props.authenticated) {
 			const query = this.props.location.search;
 			const parsed = qs.parse(query);
-			if (parsed['?token']) {
-				const token = parsed['?token'];
-				this.props.checkAuth(token).then(() => {
-					localStorage.setItem('token', token);
-					this.props.history.push('/');
-					this.handleSearch(token);
-				});
-			} else {
-				const token = localStorage.getItem('token');
-				if (token) {
-					this.props.checkAuth(token).then(() => {
-						this.handleSearch(token);
-					});
-				} else {
-					this.handleSearch(null);
-				}
-			}
+			parsed['?token'] ? this.initialLoad(parsed['?token'], true) : this.initialLoad(localStorage.getItem('token'), false);
 		}
+	}
+
+	initialLoad(token, parsed) {
+		if (!token) {
+			return this.handleSearch(token);
+		}
+		this.props.checkAuth(token).then(() => {
+			if (parsed) {
+				localStorage.setItem('token', token);
+				this.props.history.push('/');
+			}
+			return this.handleSearch(token);
+		});
 	}
 
 	handleSearch(token) {
