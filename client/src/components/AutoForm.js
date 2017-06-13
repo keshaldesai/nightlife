@@ -5,19 +5,6 @@ import { connect } from 'react-redux';
 import * as actions from '../actions';
 
 class AutoForm extends React.Component {
-	componentWillMount() {
-		const lastSearch = localStorage.getItem('lastSearch');
-		if (lastSearch) {
-			this.props.updateForm(lastSearch);
-			geocodeByAddress(lastSearch)
-				.then(results => getLatLng(results[0]))
-				.then(latLng => {
-					this.props.postLocation(latLng.lat + ',' + latLng.lng, this.props.info.googleId);
-				})
-				.catch(error => console.error('Error', error))
-		}
-	}
-
 	renderSign() {
 		if (this.props.authenticated) {
 			return (

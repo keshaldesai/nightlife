@@ -6,12 +6,13 @@ import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 
 class BarButton extends Component {
 	handleClick(barId, rsvp) {
+		const token = localStorage.getItem('token');
 		const { address, info } = this.props;
-		this.props.rsvpSet(barId, localStorage.getItem('token'), rsvp).then(() => {
+		this.props.rsvpSet(barId, token, rsvp).then(() => {
 			geocodeByAddress(address)
 				.then(results => getLatLng(results[0]))
 				.then(latLng => {
-					this.props.postLocation(latLng.lat + ',' + latLng.lng, info.googleId);
+					this.props.postLocation(latLng.lat + ',' + latLng.lng, token);
 				})
 				.catch(error => console.error('Error', error))
 		})

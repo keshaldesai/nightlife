@@ -3,8 +3,8 @@ import axios from 'axios';
 
 const API = 'http://localhost:8000/api';
 
-export function postLocation(location, userId) {
-	const request = axios.post(`${API}/search`, { location, userId })
+export function postLocation(location, token) {
+	const request = axios.post(`${API}/search`, { location, token })
 	return {
 		type: POST_LOCATION,
 		payload: request
@@ -43,7 +43,6 @@ export function fetchUserInfo(token) {
 }
 
 export function rsvpSet(barId, token, rsvp) {
-	console.log(barId, token, rsvp);
 	const request = axios.post(`${API}/rsvp`, { barId, token, rsvp });
 	return {
 		type: RSVP_CHANGE,
