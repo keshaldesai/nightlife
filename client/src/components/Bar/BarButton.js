@@ -7,7 +7,7 @@ import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 class BarButton extends Component {
 	handleClick(barId, rsvp) {
 		const token = localStorage.getItem('token');
-		const { address, info } = this.props;
+		const { address } = this.props;
 		this.props.rsvpSet(barId, token, rsvp).then(() => {
 			geocodeByAddress(address)
 				.then(results => getLatLng(results[0]))
@@ -54,7 +54,6 @@ function mapStateToProps(state) {
 	return {
 		authenticated: state.auth.authenticated,
 		address: state.address.address,
-		info: state.user.info
 	};
 }
 

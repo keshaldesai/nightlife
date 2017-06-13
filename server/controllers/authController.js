@@ -23,7 +23,7 @@ module.exports = function (app) {
 	app.post('/api/auth/in', function (req, res) {
 		const cb = (user) => {
 			return res.json({
-				id: user.googleId,
+				userId: user.googleId,
 				name: user.name
 			});
 		}

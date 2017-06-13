@@ -16,28 +16,26 @@ class App extends Component {
 				const token = parsed['?token'];
 				this.props.checkAuth(token).then(() => {
 					localStorage.setItem('token', token);
-					this.props.fetchUserInfo(token).then(() => {
-						this.props.history.push('/');
-						this.handleSearch();
-					});
+					this.props.history.push('/');
+					this.handleSearch(token);
+				}).catch(() => {
+					this.handleSearch('');
 				});
 			} else {
 				const token = localStorage.getItem('token');
 				if (token) {
 					this.props.checkAuth(token).then(() => {
-						this.props.fetchUserInfo(token)
-					}).then(() => {
-						this.handleSearch();
+						this.handleSearch(token);
+					}).catch(() => {
+						this.handleSearch('');
 					});
-
 				}
 			}
 		}
 	}
 
-	handleSearch() {
+	handleSearch(token) {
 		const lastSearch = localStorage.getItem('lastSearch');
-		const token = localStorage.getItem('token');
 		if (lastSearch) {
 			this.props.updateForm(lastSearch);
 			geocodeByAddress(lastSearch)
@@ -62,7 +60,7 @@ class App extends Component {
 function mapStateToProps(state) {
 	return {
 		authenticated: state.auth.authenticated,
-		address: state.address.address
+		address: state.address.address,
 	}
 }
 

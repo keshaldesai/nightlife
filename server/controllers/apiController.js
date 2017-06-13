@@ -11,7 +11,6 @@ module.exports = function (app) {
 	//returns list of bars nearby a location
 	app.post('/api/search', (req, res) => {
 		const { location, userId, token } = req.body;
-		console.log(token);
 		request.get('https://maps.googleapis.com/maps/api/place/nearbysearch/json?', {
 			qs: {
 				key: API_KEY,

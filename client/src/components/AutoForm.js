@@ -28,11 +28,11 @@ class AutoForm extends React.Component {
 	handleFormSubmit(event) {
 		event.preventDefault()
 		localStorage.setItem('lastSearch', this.props.address);
+		const token = localStorage.getItem('token');
 		geocodeByAddress(this.props.address)
 			.then(results => getLatLng(results[0]))
 			.then(latLng => {
-				console.log(this.props.info.googleId);
-				this.props.postLocation(latLng.lat + ',' + latLng.lng, this.props.info.googleId);
+				this.props.postLocation(latLng.lat + ',' + latLng.lng, token);
 			})
 			.catch(error => console.error('Error', error))
 	}
@@ -69,7 +69,6 @@ function mapStateToProps(state) {
 	return {
 		address: state.address.address,
 		authenticated: state.auth.authenticated,
-		info: state.user.info
 	};
 }
 
