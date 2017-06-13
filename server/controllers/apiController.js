@@ -20,18 +20,18 @@ module.exports = function (app) {
 			}
 		}, (err, response, body) => {
 			if (err) {
-				errorHandler(err, res, 400);
+				return errorHandler(err, res, 400);
 			} else {
 				const callback = (user) => {
 					const { results } = JSON.parse(body);
-					const shortRes = results.length > 10 ? results.slice(0, 10) : results;
+					const trimRes = results.length > 10 ? results.slice(0, 10) : results;
 					const obj = {};
-					shortRes.forEach((bar, index) => {
+					trimRes.forEach((bar, index) => {
 						const { name, id, rating, photos, vicinity } = bar;
 						const icon = photos ? `https://maps.googleapis.com/maps/api/place/photo?&maxwidth=300&photoreference=${photos[0].photo_reference}&key=${API_KEY}` : '';
-						Bar.findOne({ barId: id }, function (err, savedBar) {
+						Bar.findOne({ barId: id }, (err, savedBar) => {
 							if (err) {
-								errorHandler(err, res, 400);
+								return errorHandler(err, res, 400);
 							} else if (savedBar && savedBar.usersGoing.length > 0) {
 								savedBar.usersGoing.find((userGoing) => {
 									obj[index] = { name, id, rating, icon, vicinity };
@@ -39,36 +39,33 @@ module.exports = function (app) {
 									if (user && userGoing === user.googleId) {
 										obj[index].going = true;
 										if (Object.keys(obj).length === shortRes.length) {
-											res.json(obj);
+											return res.json(obj);
 										}
 										return true;
 									} else {
 										obj[index].going = false;
 										if (Object.keys(obj).length === shortRes.length) {
-											res.json(obj);
+											return res.json(obj);
 										}
 										return false;
 									}
-
 								});
 							} else {
 								obj[index] = { name, id, rating, icon, vicinity };
 								obj[index].usersGoing = 0;
 								obj[index].going = false;
 								if (Object.keys(obj).length === shortRes.length) {
-									res.json(obj);
+									return res.json(obj);
 								}
 							}
-
 						});
 					});
 				}
 				if (token) {
 					verifyUser(token, res, callback);
 				} else {
-					callback(null);
+					callback();
 				}
-
 			}
 		});
 	});
@@ -79,7 +76,7 @@ module.exports = function (app) {
 		const callback = user => {
 			Bar.findOne({ barId }, (err, bar) => {
 				if (err) {
-					errorHandler(err, res, 400);
+					return errorHandler(err, res, 400);
 				} else if (!bar) {
 					const bar = new Bar({
 						barId,
@@ -87,9 +84,9 @@ module.exports = function (app) {
 					});
 					bar.save((err, bar) => {
 						if (err) {
-							errorHandler(err, res, 400);
+							return errorHandler(err, res, 400);
 						} else {
-							res.json(bar);
+							return res.json(bar);
 						}
 					});
 				} else {
@@ -100,13 +97,12 @@ module.exports = function (app) {
 					bar.usersGoing = rsvp ? newUsers.concat([userId]) : newUsers;
 					bar.save((err, bar) => {
 						if (err) {
-							errorHandler(err, res, 400);
+							return errorHandler(err, res, 400);
 						} else {
-							res.json(bar);
+							return res.json(bar);
 						}
 					});
 				}
-
 			});
 		}
 		verifyUser(token, res, callback);

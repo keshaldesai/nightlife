@@ -18,17 +18,15 @@ class App extends Component {
 					localStorage.setItem('token', token);
 					this.props.history.push('/');
 					this.handleSearch(token);
-				}).catch(() => {
-					this.handleSearch('');
 				});
 			} else {
 				const token = localStorage.getItem('token');
 				if (token) {
 					this.props.checkAuth(token).then(() => {
 						this.handleSearch(token);
-					}).catch(() => {
-						this.handleSearch('');
 					});
+				} else {
+					this.handleSearch(null);
 				}
 			}
 		}

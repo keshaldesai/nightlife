@@ -2,22 +2,21 @@
 const jwt = require('jsonwebtoken');
 const secret = require('../config/jwtConfig.json').secret;
 const User = require('../models/user');
+const errorHandler = require('./errorHandler');
 
 module.exports = function (token, res, cb) {
 	if (!token || !res || !cb) {
-		res.status(400).end();
+		return res.status(400).end();
 	}
 	jwt.verify(token, secret, null, (err, decoded) => {
 		if (err) {
-			console.error(err);
-			res.status(401).end();
+			return errorHandler(err, res, 401);
 		} else {
 			User.findOne({ token: decoded.token }, (err, user) => {
 				if (err || !user) {
-					console.error(err);
-					res.status(401).end();
+					return errorHandler(err, res, 401);
 				} else {
-					cb(user);
+					return cb(user);
 				}
 			});
 		}
